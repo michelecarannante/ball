@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooey Animation with Text</title>
+    <style>
+        html, body, div { display: grid; }
+        html, body { grid-template: 100%/ 100%; }
+        html { min-height: 100%; }
+        body {
+            overflow: hidden;
+            background: url(https://images.unsplash.com/photo-1533644756484-bb7b29ac7fcd?w=1400) 50%/ cover;
+        }
+        svg[height='0'] { position: fixed; }
+        .goo {
+            grid-auto-flow: column;
+            grid-gap: 4em;
+            place-self: center;
+            filter: url(#goo);
+        }
+        .particle {
+            --i: 0;
+            padding: 5em;
+            border-radius: 50%;
+            translate: -50%;
+            background: hsl(calc(var(--i) * 145 - 96), 85%, 75%);
+            font-size: clamp(.5em, 2.5vmin, 10em);
+            filter: blur(calc((2 + var(--i)) * 1em));
+            animation: t 4s ease-in-out calc(var(--i) * -4s) infinite alternate;
+        }
+        .particle:nth-child(2) { --i: 1; }
+
+        /* Animation and positioning for the text */
+        .text {
+            opacity: 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 3.5em; /* Adequate font size */
+            color: #ffffff; /* White color for good contrast */
+            animation: showText 2s forwards 4s; /* Delay to match particles */
+            position: fixed;
+            left: 10%; /* Position text on the left side */
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust vertical centering */
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5); /* Shadow for readability */
+        }
+
+        @keyframes t { to { translate: 50%; } }
+        @keyframes showText {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <svg width="0" height="0">
+        <filter id="goo" x="-50%" y="-50%" width="200%" height="200%">
+            <feComponentTransfer>
+                <feFuncA type="discrete" tableValues="0 1" />
+            </feComponentTransfer>
+            <feGaussianBlur stdDeviation="3" />
+            <feComponentTransfer>
+                <feFuncA type="table" tableValues="-2 3" />
+            </feComponentTransfer>
+        </filter>
+    </svg>
+    <div class="goo">
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+    <div class="text">Scilla Cariddi Rental Boat</div>
+</body>
+</html>
